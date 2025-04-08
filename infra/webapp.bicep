@@ -7,13 +7,13 @@ var appServicePlanName = toLower('ASP-RGHexagonAZ40026-b1d4')
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   name: appServicePlanName
   location: location
-  properties: {
-    reserved: true
-  }
   sku: {
     name: sku
   }
+  kind: 'app' // Windows by default
+  // Removed 'reserved: true'
 }
+
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
   name: webAppName
   kind: 'app'
@@ -21,7 +21,7 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
-      linuxFxVersion: 'DOTNETCORE|8.0'
+      windowsFxVersion: 'DOTNET|8.0' // Windows .NET 8.0 runtime
       appSettings: [
         {
           name: 'ASPNETCORE_ENVIRONMENT'
